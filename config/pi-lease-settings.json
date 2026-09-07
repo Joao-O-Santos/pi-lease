@@ -1,0 +1,6 @@
+{
+  "allow-purchases": true,
+  "require-purchase-confirm": true,
+  "purchase-confirm-ceiling": 20,
+  "purchase-confirm-currency": "USD"
+}

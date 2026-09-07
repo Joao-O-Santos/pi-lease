@@ -1,0 +1,33 @@
+#!/usr/bin/env node
+import { spawn } from 'node:child_process';
+import { mkdir } from 'node:fs/promises';
+import { leasePaths } from './pi-lease.js';
+import { discoverBrowser } from '../src/platform.js';
+
+const check = process.argv.slice(2);
+if (check.length && (check.length !== 1 || check[0] !== '--check')) {
+  console.error('usage: pi-lease-setup [--check]'); process.exitCode = 1;
+} else {
+  const dry = check[0] === '--check';
+  try {
+    if (Number(process.versions.node.split('.')[0]) < 20) throw new Error(`Node 20+ is required (found ${process.version})`);
+    const paths = leasePaths(process.env);
+    const pi = process.env.PI_LEASE_PI || 'pi';
+    await new Promise((resolve, reject) => {
+      const child = spawn(pi, ['--version'], { stdio: 'ignore' });
+      child.once('error', () => reject(new Error('Pi executable is unavailable; install Pi or set PI_LEASE_PI')));
+      child.once('exit', code => code === 0 ? resolve() : reject(new Error(`Pi --version exited ${code}`)));
+    });
+    if (process.env.PI_OFFLINE === '1') throw new Error('PI_OFFLINE=1: package registry validation requires network access');
+    const registry = await fetch('https://registry.npmjs.org/pi-chrome-use/latest');
+    const metadata = registry.ok && await registry.json();
+    const repository = typeof metadata?.repository === 'string' ? metadata.repository : metadata?.repository?.url;
+    if (!metadata || repository?.replace(/^git\+/, '').replace(/\.git$/, '') !== 'https://github.com/citrolabs/pi-chrome-use') throw new Error('pi-chrome-use registry package is unavailable or not the upstream repository');
+    console.log(`Validated pi-chrome-use ${metadata.version} registry source.`);
+    // PATH lookup without a shell; launcher loads the extension explicitly.
+    await discoverBrowser(process.env.PI_LEASE_BROWSER, { env: process.env });
+    if (!dry) for (const directory of [paths.profile, paths.cache, paths.runtime]) await mkdir(directory, { recursive: true, mode: 0o700 });
+    console.log(`${dry ? 'Checked' : 'Created'} Pi-lease browser profile: ${paths.profile}`);
+    console.log('Run pi-lease to perform the visible latest-package preflight and temporary extension load. Sign in manually in the visible dedicated browser.');
+  } catch (error) { console.error(`pi-lease-setup: ${error.message}`); process.exitCode = 1; }
+}
