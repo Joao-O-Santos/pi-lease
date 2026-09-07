@@ -2,6 +2,8 @@
 
 **Ask Pi to pi-lease do browser work explicitly.** Pi-lease launches regular Pi in a chosen directory, plus a visible dedicated Chromium profile and the upstream `pi-chrome-use` extension for that invocation only. Ordinary `pi` is unchanged and browser-free.
 
+![Pi-lease logo](logo.png)
+
 ## Status
 
 Implemented launcher and deterministic unit tests. Manual browser, Pi, registry, profile-persistence, and signal validation remain to be performed on a Linux workstation.

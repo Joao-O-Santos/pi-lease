@@ -5,7 +5,7 @@
   "type": "module",
   "license": "MIT",
   "bin": { "pi-lease": "bin/pi-lease.js", "pi-lease-setup": "bin/pi-lease-setup" },
-  "files": ["bin", "src/browser.js", "src/platform.js", "src/policy.js", "prompts", "config", "README.md", "LICENSE"],
+  "files": ["bin", "src/browser.js", "src/platform.js", "src/policy.js", "prompts", "config", "README.md", "logo.png", "LICENSE"],
   "repository": { "type": "git", "url": "git+https://gitlab.com/Joao-O-Santos/pi-lease.git" },
   "homepage": "https://gitlab.com/Joao-O-Santos/pi-lease",
   "bugs": { "url": "https://gitlab.com/Joao-O-Santos/pi-lease/-/issues" },
