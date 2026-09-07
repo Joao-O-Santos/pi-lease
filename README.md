@@ -34,4 +34,4 @@ Linux paths are `${XDG_DATA_HOME:-${XDG_CONFIG_HOME:-$HOME/.config}}/pi-lease/ch
 
 Run `npm test`, `npm run check`, and `npm run pack:check`. GitLab CI runs `npm ci`, checks, pack dry-run, and production-only audit. Publishing requires a protected `vX.Y.Z` tag exactly matching `package.json`; it uses npm 11, GitLab OIDC `NPM_ID_TOKEN` with npm-registry audience, provenance, and public access. A maintainer must configure npm trusted publishing for this GitLab project first—this repository does not fabricate npm secrets or that external configuration. After checks and configuration, create/protect the matching version tag and let CI publish; do not publish manually.
 
-See [PLAN.md](PLAN.md) for the manual validation matrix and limitations.
+See [PLAN.md](PLAN.md) for the manual validation matrix and limitations, and [EVIDENCE.md](EVIDENCE.md) for recorded automated/host validation results.
