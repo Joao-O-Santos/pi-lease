@@ -156,6 +156,8 @@ export async function startBrowser({ executable, profileDir, runtimeDir, signal,
         done = await Promise.race([exited.then(() => true), sleep(sig === 'SIGTERM' ? 1000 : 250).then(() => false)]);
       }
       if (stateFile) await rm(stateFile, { force: true }).catch(() => {});
+      // DevToolsActivePort is invocation transient state, unlike the profile data.
+      await rm(path.join(profile, 'DevToolsActivePort'), { force: true }).catch(() => {});
       await cleanupLock();
     }
     return { pid: child.pid, endpoint: endpoint.toString(), close, child, exited };

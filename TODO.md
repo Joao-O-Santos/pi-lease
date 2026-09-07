@@ -15,6 +15,7 @@
 - `node bin/pi-lease-setup --check` — Node, Pi, browser, and upstream registry source validated without creating paths.
 - `node bin/pi-lease-setup` — documented profile/cache/runtime directories created with setup guidance.
 - Disposable Chromium lifecycle smoke — Chromium 152 launched headfully under X11 (`DISPLAY=:0`), loopback CDP identity and page target verified, and the owned process exited cleanly.
+- Disposable persistence smoke — the dedicated profile's `Default/Preferences` survived close/relaunch and `DevToolsActivePort` was removed as transient state.
 - End-to-end launcher smoke — latest package preflight completed, regular Pi started with the explicit extension and bundled prompt, then exited cleanly in a non-interactive harness; no Chromium process remained.
 
 ## Remaining validation
