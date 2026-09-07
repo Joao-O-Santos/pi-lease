@@ -12,10 +12,10 @@ if (check.length && (check.length !== 1 || check[0] !== '--check')) {
   try {
     if (Number(process.versions.node.split('.')[0]) < 20) throw new Error(`Node 20+ is required (found ${process.version})`);
     const paths = leasePaths(process.env);
-    const pi = process.env.PI_LEASE_PI || 'pi';
+    const pi = 'pi';
     await new Promise((resolve, reject) => {
       const child = spawn(pi, ['--version'], { stdio: 'ignore' });
-      child.once('error', () => reject(new Error('Pi executable is unavailable; install Pi or set PI_LEASE_PI')));
+      child.once('error', () => reject(new Error('Pi executable is unavailable; install Pi')));
       child.once('exit', code => code === 0 ? resolve() : reject(new Error(`Pi --version exited ${code}`)));
     });
     if (process.env.PI_OFFLINE === '1') throw new Error('PI_OFFLINE=1: package registry validation requires network access');

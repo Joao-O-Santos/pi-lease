@@ -1,7 +1,7 @@
 {
   "name": "pi-lease",
-  "version": "0.2.0",
-  "description": "Explicit privileged Pi launcher with a dedicated visible browser",
+  "version": "0.2.1",
+  "description": "Launch Pi with a dedicated visible Chromium browser",
   "type": "module",
   "license": "MIT",
   "bin": {
@@ -12,9 +12,7 @@
     "bin",
     "src/browser.js",
     "src/platform.js",
-    "src/policy.js",
     "prompts",
-    "config",
     "README.md",
     "logo.png",
     "LICENSE"
@@ -37,7 +35,7 @@
   },
   "scripts": {
     "test": "node --test test/*.test.js",
-    "typecheck": "node --check bin/pi-lease.js && node --check bin/pi-lease-setup && node --check src/policy.js",
+    "typecheck": "node --check bin/pi-lease.js && node --check bin/pi-lease-setup",
     "lint": "node --check bin/pi-lease.js && node --check bin/pi-lease-setup && node --check src/*.js",
     "check": "npm run typecheck && npm run lint && npm test",
     "pack:check": "npm pack --dry-run"
