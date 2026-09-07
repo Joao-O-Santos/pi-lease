@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { spawn } from 'node:child_process';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, chmod } from 'node:fs/promises';
 import { leasePaths } from './pi-lease.js';
 import { discoverBrowser } from '../src/platform.js';
 
@@ -26,7 +26,10 @@ if (check.length && (check.length !== 1 || check[0] !== '--check')) {
     console.log(`Validated pi-chrome-use ${metadata.version} registry source.`);
     // PATH lookup without a shell; launcher loads the extension explicitly.
     await discoverBrowser(process.env.PI_LEASE_BROWSER, { env: process.env });
-    if (!dry) for (const directory of [paths.profile, paths.cache, paths.runtime]) await mkdir(directory, { recursive: true, mode: 0o700 });
+    if (!dry) for (const directory of [paths.profile, paths.cache, paths.runtime]) {
+      await mkdir(directory, { recursive: true, mode: 0o700 });
+      await chmod(directory, 0o700).catch(() => {});
+    }
     console.log(`${dry ? 'Checked' : 'Created'} Pi-lease browser profile: ${paths.profile}`);
     console.log('Run pi-lease to perform the visible latest-package preflight and temporary extension load. Sign in manually in the visible dedicated browser.');
   } catch (error) { console.error(`pi-lease-setup: ${error.message}`); process.exitCode = 1; }
