@@ -5,6 +5,11 @@ stages: [test, publish]
 check:
   stage: test
   script:
+    - apt-get update
+    - apt-get install --yes curl
+    - curl --fail --location --output /tmp/pandoc.deb https://github.com/jgm/pandoc/releases/download/3.10.1/pandoc-3.10.1-1-amd64.deb
+    - echo 'b419369915e0f3181be0afdb040ec8ecc6b70e72e5992652a0d83aed9e6bc109  /tmp/pandoc.deb' | sha256sum --check
+    - dpkg --install /tmp/pandoc.deb
     - npm ci
     - npm run check
     - npm pack --dry-run

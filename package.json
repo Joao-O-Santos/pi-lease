@@ -1,49 +1,57 @@
 {
-  "name": "pi-lease",
-  "version": "0.2.2",
-  "description": "Launch Pi with a dedicated visible Chromium browser",
-  "type": "module",
-  "license": "MIT",
-  "bin": {
-    "pi-lease": "bin/pi-lease.js",
-    "pi-lease-setup": "bin/pi-lease-setup"
-  },
-  "files": [
-    "bin",
-    "src/browser.js",
-    "src/platform.js",
-    "prompts",
-    "README.md",
-    "logo.png",
-    "LICENSE"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://gitlab.com/Joao-O-Santos/pi-lease.git"
-  },
-  "homepage": "https://gitlab.com/Joao-O-Santos/pi-lease",
-  "bugs": {
-    "url": "https://gitlab.com/Joao-O-Santos/pi-lease/-/issues"
-  },
-  "keywords": [
-    "pi-package",
-    "pi",
-    "browser"
-  ],
-  "engines": {
-    "node": ">=20"
-  },
-  "scripts": {
-    "test": "node --test test/*.test.js",
-    "typecheck": "node --check bin/pi-lease.js && node --check bin/pi-lease-setup",
-    "lint": "node --check bin/pi-lease.js && node --check bin/pi-lease-setup && node --check src/*.js",
-    "check": "npm run typecheck && npm run lint && npm test",
-    "pack:check": "npm pack --dry-run"
-  },
-  "pi": {
-    "prompts": [
-      "./prompts"
-    ],
-    "image": "https://gitlab.com/Joao-O-Santos/pi-lease/-/raw/main/logo.png"
-  }
+	"name": "pi-lease",
+	"version": "0.2.2",
+	"description": "Launch Pi with a dedicated visible Chromium browser",
+	"type": "module",
+	"license": "MIT",
+	"bin": {
+		"pi-lease": "bin/pi-lease.js",
+		"pi-lease-setup": "bin/pi-lease-setup"
+	},
+	"files": [
+		"bin",
+		"src/browser.js",
+		"src/platform.js",
+		"prompts",
+		"README.md",
+		"logo.png",
+		"LICENSE"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://gitlab.com/Joao-O-Santos/pi-lease.git"
+	},
+	"homepage": "https://gitlab.com/Joao-O-Santos/pi-lease",
+	"bugs": {
+		"url": "https://gitlab.com/Joao-O-Santos/pi-lease/-/issues"
+	},
+	"keywords": [
+		"pi-package",
+		"pi",
+		"browser"
+	],
+	"engines": {
+		"node": ">=20"
+	},
+	"scripts": {
+		"test": "node --test test/*.test.js",
+		"typecheck": "node --check bin/pi-lease.js && node --check bin/pi-lease-setup",
+		"lint": "biome lint .",
+		"format:check": "biome ci --linter-enabled=false --assist-enabled=false .",
+		"format:fix": "biome check --write .",
+		"markdown:check": "node scripts/format-markdown.mjs",
+		"markdown:fix": "node scripts/format-markdown.mjs --write",
+		"style": "biome ci . && npm run markdown:check",
+		"check": "npm run typecheck && npm run style && npm test",
+		"pack:check": "npm pack --dry-run"
+	},
+	"pi": {
+		"prompts": [
+			"./prompts"
+		],
+		"image": "https://gitlab.com/Joao-O-Santos/pi-lease/-/raw/main/logo.png"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.5.12"
+	}
 }
