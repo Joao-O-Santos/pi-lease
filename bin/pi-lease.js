@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { spawn as nodeSpawn } from "node:child_process";
-import { statSync } from "node:fs";
+import { realpathSync, statSync } from "node:fs";
 import { mkdir, realpath } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -158,7 +158,15 @@ export async function main(argv = process.argv.slice(2), env = process.env, deps
 		await stop("SIGTERM");
 	}
 }
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+function isEntrypoint() {
+	if (!process.argv[1]) return false;
+	try {
+		return realpathSync(process.argv[1]) === fileURLToPath(import.meta.url);
+	} catch {
+		return false;
+	}
+}
+if (isEntrypoint()) {
 	main()
 		.then((code) => {
 			process.exitCode = code;

@@ -110,8 +110,10 @@ npm run pack:check
 ```
 
 The repository's GitLab pipeline runs those checks plus a production
-dependency audit. Protected release tags (`vX.Y.Z`) publish to npm with
-provenance when npm trusted publishing is configured for the project.
+dependency audit. The main branch and release tags deploy this README to
+[GitLab Pages](https://pi-lease-984274.gitlab.io). Protected release
+tags (`vX.Y.Z`) publish to npm with provenance when npm trusted
+publishing is configured for the project.
 
 ## License
 

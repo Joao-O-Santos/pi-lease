@@ -1,19 +1,44 @@
-image: node:22
+image: node:22-bookworm-slim
 
-stages: [test, publish]
+stages: [test, pages, publish]
 
-check:
-  stage: test
-  script:
+variables:
+  PANDOC_VERSION: "3.10.1"
+  PANDOC_SHA256: "b419369915e0f3181be0afdb040ec8ecc6b70e72e5992652a0d83aed9e6bc109"
+
+.with-pandoc:
+  before_script:
     - apt-get update
     - apt-get install --yes curl
-    - curl --fail --location --output /tmp/pandoc.deb https://github.com/jgm/pandoc/releases/download/3.10.1/pandoc-3.10.1-1-amd64.deb
-    - echo 'b419369915e0f3181be0afdb040ec8ecc6b70e72e5992652a0d83aed9e6bc109  /tmp/pandoc.deb' | sha256sum --check
+    - curl --fail --location --output /tmp/pandoc.deb "https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-1-amd64.deb"
+    - echo "${PANDOC_SHA256}  /tmp/pandoc.deb" | sha256sum --check
     - dpkg --install /tmp/pandoc.deb
+
+check:
+  extends: .with-pandoc
+  stage: test
+  script:
     - npm ci
     - npm run check
     - npm pack --dry-run
     - npm audit --omit=dev
+
+pages:
+  extends: .with-pandoc
+  stage: pages
+  needs: [check]
+  pages: true
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+$/'
+  script:
+    - mkdir -p public
+    - pandoc --from gfm --to html5 --standalone --css pages.css --metadata lang=en --metadata pagetitle=Pi-lease --output public/index.html README.md
+    - cp logo.png pages.css public/
+  artifacts:
+    paths:
+      - public
+    expire_in: 1 week
 
 publish:
   stage: publish

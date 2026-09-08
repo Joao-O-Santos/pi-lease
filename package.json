@@ -1,6 +1,6 @@
 {
 	"name": "pi-lease",
-	"version": "0.2.2",
+	"version": "0.2.3",
 	"description": "Launch Pi with a dedicated visible Chromium browser",
 	"type": "module",
 	"license": "MIT",

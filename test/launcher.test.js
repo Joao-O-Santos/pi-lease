@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { EventEmitter } from "node:events";
-import { mkdtemp, writeFile } from "node:fs/promises";
+import { mkdtemp, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 import { leasePaths, main } from "../bin/pi-lease.js";
 
 function child(code = 0) {
@@ -53,6 +55,14 @@ function dependencies(calls) {
 		log: (value) => (calls.log = value),
 	};
 }
+test("runs when invoked through a package-manager symlink", async () => {
+	const root = await mkdtemp(path.join(tmpdir(), "lease-symlink-"));
+	const launcher = path.join(root, "pi-lease");
+	await symlink(fileURLToPath(new URL("../bin/pi-lease.js", import.meta.url)), launcher);
+	const result = spawnSync(launcher, ["one", "two"], { encoding: "utf8" });
+	assert.equal(result.status, 1);
+	assert.match(result.stderr, /only one directory/);
+});
 test("launches regular Pi in requested directory with explicit extension and prompt", async () => {
 	const cwd = await mkdtemp(path.join(tmpdir(), "lease-launch-")),
 		calls = {};
