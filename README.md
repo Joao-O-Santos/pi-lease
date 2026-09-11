@@ -2,6 +2,14 @@
 
 ![Pi-lease logo](logo.png)
 
+[![pipeline
+status](https://gitlab.com/Joao-O-Santos/pi-lease/badges/main/pipeline.svg)](https://gitlab.com/Joao-O-Santos/pi-lease/-/commits/main)
+[![npm
+version](https://img.shields.io/npm/v/pi-lease.svg)](https://www.npmjs.com/package/pi-lease)
+[![npm
+downloads](https://img.shields.io/npm/dt/pi-lease.svg)](https://www.npmjs.com/package/pi-lease)
+[![license](https://img.shields.io/npm/l/pi-lease.svg)](https://gitlab.com/Joao-O-Santos/pi-lease/-/blob/main/LICENSE)
+
 **Pi-lease lets you ask Pi to pi-lease use a real browser.** It launches
 normal [Pi](https://pi.dev) in the directory you choose, with a visible,
 dedicated Chromium profile and the upstream
